@@ -1,0 +1,15 @@
+pipeline {
+agent any
+ stages {
+  stage('Build') {
+   steps {
+    rsync -av -e "ssh -o StrictHostKeyChecking=no -i /var/lib/jenkins/ansible.pem" /var/lib/jenkins/workspace/jenkins-pipeline/         ubuntu@10.0.1.191:/home/ubuntu/new_chatapp
+   }
+ }
+ stage('Deploy') {
+  steps {
+   ssh -i /var/lib/jenkins/ansible.pem ubuntu@10.0.1.191 sudo systemctl restart gunicorn
+  }
+ }
+}
+}
